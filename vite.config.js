@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
         room: resolve(import.meta.dirname, 'room.html'),
+        game: resolve(import.meta.dirname, 'game.html'),
       },
     },
   },

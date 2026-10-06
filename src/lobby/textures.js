@@ -468,7 +468,7 @@ export function makeBandTexture({ kind, text = '', note = '', bird = null }) {
 }
 
 /** Hai trang sách mở trên bệ giữa sảnh (1024×704 cho cả hai trang). */
-export function makeBookTexture(title = 'Lời giới thiệu', seed = 1969) {
+export function makeBookTexture(title = 'Lời giới thiệu', seed = 1969, promptText = 'Bấm để đọc') {
   const W = 1024;
   const H = 704;
   const [canvas, ctx] = makeCanvas(W, H);
@@ -491,7 +491,7 @@ export function makeBookTexture(title = 'Lời giới thiệu', seed = 1969) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#7A1712';
-  ctx.font = `700 52px ${SERIF}`;
+  ctx.font = `700 48px ${SERIF}`;
   ctx.fillText(title, left, 230);
   ctx.fillStyle = GOLD;
   ctx.fillRect(left - 70, 282, 140, 3);
@@ -509,6 +509,6 @@ export function makeBookTexture(title = 'Lời giới thiệu', seed = 1969) {
 
   ctx.fillStyle = '#7A1712';
   ctx.font = `italic 400 26px ${SERIF}`;
-  ctx.fillText('Bấm để đọc', right, H - 80);
+  ctx.fillText(promptText, right, H - 80);
   return toTexture(canvas);
 }

@@ -346,7 +346,12 @@ async function startHall() {
       action: book.action,
       hits: book.hits,
       name: book.title,
-      desc: book.action === 'intro' ? 'Bấm vào cuốn sách để đọc lời giới thiệu bảo tàng' : 'Bấm vào cuốn sách để xem nguồn tư liệu và ghi công',
+      desc:
+        book.action === 'intro'
+          ? 'Bấm vào cuốn sách để đọc lời giới thiệu bảo tàng'
+          : book.action === 'game'
+            ? 'Bấm vào để tham gia thử thách: Đời sinh viên (Hard Mode)'
+            : 'Bấm vào cuốn sách để xem nguồn tư liệu và ghi công',
       glow(k) {
         book.coverMaterial.emissiveIntensity = k * 0.45;
         for (const m of book.pageMaterials) m.emissiveIntensity = 0.25 + k * 0.4;
@@ -355,6 +360,12 @@ async function startHall() {
     onAction(action) {
       if (action === 'intro') openDialog(el.introDialog);
       if (action === 'credits') openDialog(el.creditsDialog);
+      if (action === 'game') {
+        el.fade.classList.add('is-on');
+        setTimeout(() => {
+          window.location.href = './game.html';
+        }, 300);
+      }
     },
   });
 

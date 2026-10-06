@@ -306,14 +306,16 @@ function buildLights(scene, doors) {
 
 // Đặt lệch tâm, ở góc giữa cửa 1 và cửa 6: người xem đứng đúng tâm sảnh nên
 // bệ ở chính tâm sẽ nằm ngay dưới chân, không nhìn thấy được.
-// Hai bục sách đối xứng hai bên hướng nhìn ban đầu: trái là Lời giới thiệu, phải là Nguồn tư liệu
+// Ba bục sách/cột thông tin ở sảnh:
+// Trái: Lời giới thiệu, Giữa: Chơi thử thách, Phải: Nguồn tư liệu
 export const BOOKS = [
-  { action: 'intro', angle: -Math.PI / 6, title: 'Lời giới thiệu', cover: 0x7a1712, seed: 1969 },
-  { action: 'credits', angle: Math.PI / 6, title: 'Nguồn tư liệu', cover: 0x2f3f30, seed: 1890 },
+  { action: 'intro', angle: -Math.PI / 4, title: 'Lời giới thiệu', promptText: 'Bấm để đọc', cover: 0x7a1712, seed: 1969 },
+  { action: 'game', angle: 0, title: 'Chơi thử thách', promptText: 'Bấm để chơi', cover: 0xb8860b, seed: 2026 },
+  { action: 'credits', angle: Math.PI / 4, title: 'Nguồn tư liệu', promptText: 'Bấm để xem', cover: 0x2f3f30, seed: 1890 },
 ];
 const BOOK_DISTANCE = 2.5;
 
-function buildBook(shared, { action, angle, title, cover: coverColor, seed }) {
+function buildBook(shared, { action, angle, title, promptText, cover: coverColor, seed }) {
   const group = new THREE.Group();
   const a = angle;
   group.position.set(Math.sin(a) * BOOK_DISTANCE, 0, -Math.cos(a) * BOOK_DISTANCE);
@@ -365,7 +367,7 @@ function buildBook(shared, { action, angle, title, cover: coverColor, seed }) {
   const cover = box(0.7, 0.025, 0.48, coverMaterial);
   lectern.add(cover);
 
-  const pageTexture = makeBookTexture(title, seed);
+  const pageTexture = makeBookTexture(title, seed, promptText);
   const pageMaterial = new THREE.MeshStandardMaterial({
     map: pageTexture,
     roughness: 0.8,

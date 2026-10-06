@@ -120,16 +120,41 @@ body.lobby {
 }
 
 .map-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   padding: 9px 16px;
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
+  transition: all 0.2s ease;
 }
 
 .map-toggle:hover,
 .map-toggle[aria-expanded='true'] {
   background: var(--lacquer);
   border-color: var(--gold);
+  color: var(--cream);
+}
+
+.game-lobby-btn {
+  background: linear-gradient(135deg, rgb(78 14 11 / 0.85), rgb(34 33 31 / 0.9));
+  border-color: var(--gold-soft);
+  box-shadow: 0 0 12px rgb(201 162 63 / 0.25);
+}
+
+.game-lobby-btn:hover {
+  background: linear-gradient(135deg, var(--lacquer), #961d17);
+  box-shadow: 0 0 16px rgb(201 162 63 / 0.45);
+}
+
+.map-game-btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold-soft);
+  font-weight: 500;
 }
 
 .map-panel {

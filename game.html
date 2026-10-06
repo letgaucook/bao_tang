@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đời Sinh Viên: HCM202 Hard Mode — Vận Dụng Tư Tưởng Hồ Chí Minh</title>
+    <meta
+      name="description"
+      content="Interactive Web Experience: Đời Sinh Viên — Bạn Sẽ Chọn Gì? Vận dụng sáng tạo các nguyên lý Tư tưởng Hồ Chí Minh (HCM202) vào những tình huống học tập, đạo đức và hoạt động tập thể thực tế."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%237A1712%22/%3E%3Cpath d=%22M16 5l3.1 9.5H29l-8 5.8 3 9.5-8-5.8-8 5.8 3-9.5-8-5.8h9.9z%22 fill=%22%23C9A23F%22/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&subset=vietnamese&display=swap"
+    />
+    <link rel="stylesheet" href="/src/styles/game.css" />
+  </head>
+  <body class="game-body">
+    <div class="game-bg-pattern" aria-hidden="true"></div>
+    <div class="alarm-flash-overlay" id="alarm-flash-overlay" aria-hidden="true"></div>
+
+    <!-- Navigation Bar -->
+    <header class="game-nav">
+      <a href="./index.html" class="game-nav__brand">
+        <span class="game-nav__logo" aria-hidden="true">🏛️</span>
+        <span>Bảo tàng Tư tưởng HCM</span>
+      </a>
+      <div class="game-nav__actions">
+        <button type="button" class="nav-btn" id="sound-toggle-btn" aria-label="Bật/Tắt âm thanh">
+          <span id="sound-icon">🔊</span> Âm thanh
+        </button>
+        <a href="./index.html" class="nav-btn">
+          <span>🏛️</span> Về Sảnh 3D
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="game-container">
+      <!-- Live 5 Stats HUD -->
+      <section class="game-hud" id="game-hud" aria-label="Bảng chỉ số tư tưởng" hidden>
+        <div class="hud-title-bar">
+          <span class="hud-level-badge" id="hud-level-badge">LEVEL 1 — KHỞI ĐỘNG DỰ ÁN</span>
+          <div class="hud-actions">
+            <button type="button" class="hud-btn" id="knowledge-tree-btn">
+              🌳 Cây Tri Thức
+            </button>
+          </div>
+        </div>
+
+        <div class="hud-stats-grid-5">
+          <!-- Stat 1: Độc lập -->
+          <div class="stat-card" id="stat-card-docLap">
+            <div class="stat-card__head">
+              <span class="stat-card__label">🎯 Độc lập</span>
+              <span class="stat-card__val" id="stat-val-docLap">50</span>
+            </div>
+            <div class="stat-progress-bg">
+              <div class="stat-progress-bar docLap" id="stat-bar-docLap" style="width: 50%"></div>
+            </div>
+          </div>
+
+          <!-- Stat 2: Đoàn kết -->
+          <div class="stat-card" id="stat-card-doanKet">
+            <div class="stat-card__head">
+              <span class="stat-card__label">🤝 Đoàn kết</span>
+              <span class="stat-card__val" id="stat-val-doanKet">50</span>
+            </div>
+            <div class="stat-progress-bg">
+              <div class="stat-progress-bar doanKet" id="stat-bar-doanKet" style="width: 50%"></div>
+            </div>
+          </div>
+
+          <!-- Stat 3: Đạo đức -->
+          <div class="stat-card" id="stat-card-daoDuc">
+            <div class="stat-card__head">
+              <span class="stat-card__label">⚖️ Đạo đức</span>
+              <span class="stat-card__val" id="stat-val-daoDuc">50</span>
+            </div>
+            <div class="stat-progress-bg">
+              <div class="stat-progress-bar daoDuc" id="stat-bar-daoDuc" style="width: 50%"></div>
+            </div>
+          </div>
+
+          <!-- Stat 4: Vì dân -->
+          <div class="stat-card" id="stat-card-viDan">
+            <div class="stat-card__head">
+              <span class="stat-card__label">👥 Vì dân</span>
+              <span class="stat-card__val" id="stat-val-viDan">50</span>
+            </div>
+            <div class="stat-progress-bg">
+              <div class="stat-progress-bar viDan" id="stat-bar-viDan" style="width: 50%"></div>
+            </div>
+          </div>
+
+          <!-- Stat 5: Học & Làm -->
+          <div class="stat-card" id="stat-card-hocLam">
+            <div class="stat-card__head">
+              <span class="stat-card__label">💡 Học & Làm</span>
+              <span class="stat-card__val" id="stat-val-hocLam">50</span>
+            </div>
+            <div class="stat-progress-bg">
+              <div class="stat-progress-bar hocLam" id="stat-bar-hocLam" style="width: 50%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 1: INTRO SCREEN -->
+      <section class="screen-view is-active" id="screen-intro" aria-labelledby="intro-title">
+        <div class="intro-hero">
+          <div class="intro-badge">💡 Thử Thách Vận Dụng HCM202</div>
+          <h1 class="intro-title" id="intro-title">
+            🎓 ĐỜI SINH VIÊN: <span>HARD MODE</span>
+          </h1>
+          <p class="intro-tagline">
+            “Biết tư tưởng là một chuyện. Biết vận dụng lại là chuyện khác.”
+          </p>
+
+          <div class="stats-explainer-5">
+            <div class="stat-info-card">
+              <div class="stat-info-card__title"><span>🎯</span> Độc lập</div>
+              <p class="stat-info-card__desc">Tự chủ, sáng tạo, không giáo điều phụ thuộc.</p>
+            </div>
+            <div class="stat-info-card">
+              <div class="stat-info-card__title"><span>🤝</span> Đoàn kết</div>
+              <p class="stat-info-card__desc">Hợp lực tập thể, dân chủ, chân thành giúp nhau.</p>
+            </div>
+            <div class="stat-info-card">
+              <div class="stat-info-card__title"><span>⚖️</span> Đạo đức</div>
+              <p class="stat-info-card__desc">Cần – Kiệm – Liêm – Chính – Chí công vô tư.</p>
+            </div>
+            <div class="stat-info-card">
+              <div class="stat-info-card__title"><span>👥</span> Vì dân</div>
+              <p class="stat-info-card__desc">Lấy người học làm gốc, phục vụ thực tế.</p>
+            </div>
+            <div class="stat-info-card">
+              <div class="stat-info-card__title"><span>💡</span> Học & Làm</div>
+              <p class="stat-info-card__desc">Lý luận đi đôi với thực tiễn sinh động.</p>
+            </div>
+          </div>
+
+          <button type="button" class="start-btn" id="start-btn">
+            ▶ BẮT ĐẦU THỬ THÁCH
+          </button>
+
+          <p class="intro-warning">
+            ⚠️ 8 màn chơi. 20+ quyết định. Không phải câu nào cũng có đáp án dễ dàng!
+          </p>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: LEVEL / SCENARIO SCREEN -->
+      <section class="screen-view" id="screen-level" aria-labelledby="situation-headline">
+        <div class="level-card">
+          <div class="level-header">
+            <span class="level-tag" id="level-tag">LEVEL 1</span>
+            <span class="level-time-badge" id="level-time-badge">⏰ 07:30 SÁNG</span>
+          </div>
+
+          <div class="level-situation">
+            <h2 class="situation-headline" id="situation-headline">Tình huống</h2>
+            <p class="situation-desc" id="situation-desc">Nội dung tình huống...</p>
+          </div>
+
+          <!-- NPC Dialogue Box -->
+          <div class="npc-dialogue-box" id="npc-dialogue-box" hidden>
+            <div class="npc-avatar" id="npc-avatar">👨‍💻</div>
+            <div class="npc-bubble">
+              <div class="npc-name" id="npc-name">Tuấn Đi Tắt</div>
+              <div class="npc-quote" id="npc-quote">“Copy đi cho nhanh!”</div>
+            </div>
+          </div>
+
+          <!-- Memory System Callout Box -->
+          <div class="memory-callout-box" id="memory-callout-box" hidden>
+            <div class="memory-callout-text" id="memory-callout-text"></div>
+          </div>
+
+          <!-- Options List -->
+          <div class="level-options" id="level-options-list">
+            <!-- Dynamically injected choices -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2.5: PHILOSOPHICAL REFLECTION SCREEN -->
+      <section class="screen-reflection" id="screen-reflection" aria-label="Khoảnh khắc phản chiếu">
+        <div class="reflection-card">
+          <h2 class="reflection-title">
+            “Nếu không có điểm số...<br />Bạn có còn đưa ra những lựa chọn như vừa rồi?”
+          </h2>
+          <p class="reflection-sub">
+            — Đó mới là câu hỏi thật sự của Tư tưởng Hồ Chí Minh —
+          </p>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: RESULT SUMMARY SCREEN -->
+      <section class="screen-view" id="screen-result" aria-labelledby="result-title">
+        <div class="result-card">
+          <div class="result-header-tag">HỒ SƠ ĐÁNH GIÁ NĂNG LỰC HCM202</div>
+          <h2 class="result-title" id="result-title">🥇 NGƯỜI VẬN DỤNG THỰC TIỄN</h2>
+          <div class="result-badge" id="result-badge">TỰ CHỦ & ĐỔI MỚI SÁNG TẠO</div>
+
+          <blockquote class="result-quote" id="result-quote">
+            “Bạn không chỉ thuộc lý thuyết trên giảng đường — Bạn biết cách biến tri thức thành giải pháp trong cuộc sống thực tế.”
+          </blockquote>
+
+          <p class="result-desc" id="result-desc">
+            Bạn đã xuất sắc vận dụng tư tưởng Hồ Chí Minh...
+          </p>
+
+          <div class="result-analysis" id="result-analysis">
+            <!-- Profile analysis text -->
+          </div>
+
+          <!-- 5-Axis Radar Chart & Score Details -->
+          <div class="result-stats-section">
+            <div class="radar-canvas-wrap">
+              <canvas id="radar-canvas" class="radar-canvas" width="320" height="320"></canvas>
+            </div>
+            <div class="result-stats-list" id="result-stats-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Unlocked Achievements -->
+          <div class="achievements-box">
+            <div class="achievements-box__title">
+              <span>🏅</span> Danh mục Thành tựu Tư tưởng đã Đạt được
+            </div>
+            <div class="achievements-grid" id="achievements-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Educational HCM Box -->
+          <div class="hcm-takeaway-box">
+            <div class="hcm-takeaway-box__title">
+              <span>🌿</span> Tư tưởng Hồ Chí Minh: Nền tảng Thế giới quan & Phương pháp luận
+            </div>
+            <div class="hcm-takeaway-box__content">
+              <p>
+                Tư tưởng Hồ Chí Minh là hệ thống quan điểm toàn diện và sâu sắc: từ <strong>Độc lập tự chủ</strong>, <strong>Đại đoàn kết toàn dân tộc</strong>, <strong>Đạo đức cách mạng</strong> cho đến <strong>Nhà nước của dân, do dân, vì dân</strong> và <strong>Phương pháp học đi đôi với hành</strong>.
+              </p>
+              <p>
+                Học tập môn HCM202 không dừng lại ở việc ghi nhớ khái niệm để qua môn, mà chính là rèn luyện bản lĩnh sống, tư duy độc lập sáng tạo và tinh thần cống hiến vì sự phồn vinh của đất nước.
+              </p>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button type="button" class="btn-primary" id="restart-btn">
+              🔄 Chơi lại để thử thách góc nhìn mới
+            </button>
+            <button type="button" class="btn-secondary" id="share-btn">
+              📋 Sao chép Hồ sơ Kết quả
+            </button>
+            <a href="./index.html" class="btn-secondary">
+              🏛️ Trở về Sảnh Bảo Tàng
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Feedback Modal Dialog with Academic Decode -->
+    <div class="game-modal-overlay" id="feedback-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="game-modal">
+        <div class="modal-emoji" id="modal-emoji">💡</div>
+        <h3 class="modal-title" id="modal-title">Kết quả lựa chọn</h3>
+        <div class="modal-quote" id="modal-quote">“Trích dẫn...”</div>
+        <p class="modal-detail" id="modal-detail">Phân tích hậu quả thực tế...</p>
+        
+        <div class="modal-deltas" id="modal-deltas">
+          <!-- Dynamic Delta chips -->
+        </div>
+
+        <div class="modal-decode-box" id="modal-decode-box">
+          <div class="modal-decode-head">
+            <span class="modal-decode-badge">GIẢI MÃ TƯ TƯỞNG</span>
+            <span class="modal-decode-chapter" id="modal-decode-chapter">Chương 2: Độc lập dân tộc</span>
+          </div>
+          <div class="modal-decode-content" id="modal-decode-content">
+            Nội dung lý luận giáo trình...
+          </div>
+        </div>
+
+        <button type="button" class="modal-btn" id="modal-next-btn">
+          Tiếp Tục Chặng Tiếp Theo ➔
+        </button>
+      </div>
+    </div>
+
+    <!-- Mid-Game Behavioral Observation Modal -->
+    <div class="game-modal-overlay" id="midgame-analysis-modal" role="dialog" aria-modal="true">
+      <div class="game-modal">
+        <div class="modal-emoji">🚨</div>
+        <h3 class="modal-title">PHÂN TÍCH HÀNH VI GIỮA CHẶNG</h3>
+        <div class="modal-quote">“Bạn đang bị quan sát qua từng quyết định...” 👀</div>
+        <p class="modal-detail" id="midgame-tendency-desc">
+          Hệ thống nhận thấy xu hướng giải quyết vấn đề của bạn...
+        </p>
+        <p class="modal-detail" style="font-style: italic; color: var(--gold-soft); font-size: 0.85rem;">
+          Tư tưởng Hồ Chí Minh luôn đòi hỏi sự kiên định trong nguyên tắc và linh hoạt trong phương pháp. Hãy cùng khám phá 4 chặng thử thách mang tính quyết định tiếp theo!
+        </p>
+        <button type="button" class="modal-btn" id="midgame-close-btn">
+          Tiếp Tục Đối Diện Thử Thách ➔
+        </button>
+      </div>
+    </div>
+
+    <!-- Knowledge Tree Modal -->
+    <div class="game-modal-overlay" id="knowledge-tree-modal" role="dialog" aria-modal="true">
+      <div class="game-modal">
+        <div class="modal-emoji">🌳</div>
+        <h3 class="modal-title">CÂY TRI THỨC TƯ TƯỞNG HỒ CHÍ MINH</h3>
+        <p class="modal-detail">
+          Các mắt xích lý luận được mở khóa tương ứng với các tình huống bạn đã giải mã trong game.
+        </p>
+        <div class="knowledge-tree-list" id="knowledge-tree-list">
+          <!-- Rendered via JS -->
+        </div>
+        <button type="button" class="modal-btn" id="knowledge-tree-close-btn">
+          Đóng Sơ Đồ Tri Thức
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-msg" id="toast-msg" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/game/game.js"></script>
+  </body>
+</html>

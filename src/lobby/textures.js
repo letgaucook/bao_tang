@@ -512,3 +512,78 @@ export function makeBookTexture(title = 'Lời giới thiệu', seed = 1969, pro
   ctx.fillText(promptText, right, H - 80);
   return toTexture(canvas);
 }
+
+export const getMaxAnisotropy = () => maxAnisotropy;
+
+/**
+ * Cánh sen nhìn từ dưới lên: trắng ngà ở gốc, ửng hồng về đầu cánh, gân mảnh dọc thân,
+ * viền vàng thếp hai bên mép. Trục dọc texture (v) = dọc thân cánh (0 gốc → 1 đầu cánh),
+ * trục ngang (u) = bề ngang cánh (0 và 1 là hai mép).
+ */
+export function makePetalTexture() {
+  const S = 256;
+  const [canvas, ctx] = makeCanvas(S, S);
+  // Canvas vẽ từ trên xuống, còn v của texture tính từ dưới lên: đầu cánh ở trên cùng
+  const body = ctx.createLinearGradient(0, S, 0, 0);
+  body.addColorStop(0, '#F4EEE2');
+  body.addColorStop(0.55, '#F3E6DC');
+  body.addColorStop(0.85, '#EFC9C2');
+  body.addColorStop(1, '#E8AFAA');
+  ctx.fillStyle = body;
+  ctx.fillRect(0, 0, S, S);
+
+  // Đổ bóng nhẹ về hai mép để cánh có khối
+  const shade = ctx.createLinearGradient(0, 0, S, 0);
+  shade.addColorStop(0, 'rgba(120, 80, 60, 0.18)');
+  shade.addColorStop(0.25, 'rgba(120, 80, 60, 0)');
+  shade.addColorStop(0.75, 'rgba(120, 80, 60, 0)');
+  shade.addColorStop(1, 'rgba(120, 80, 60, 0.18)');
+  ctx.fillStyle = shade;
+  ctx.fillRect(0, 0, S, S);
+
+  // Gân cánh: các đường mảnh tỏa từ gốc lên đầu cánh
+  ctx.strokeStyle = 'rgba(190, 130, 115, 0.28)';
+  ctx.lineWidth = 1.5;
+  for (let i = 1; i < 9; i++) {
+    const x = (i / 9) * S;
+    ctx.beginPath();
+    ctx.moveTo(S / 2 + (x - S / 2) * 0.3, S);
+    ctx.quadraticCurveTo(x, S * 0.5, S / 2 + (x - S / 2) * 0.55, 6);
+    ctx.stroke();
+  }
+
+  // Viền vàng thếp dọc hai mép
+  ctx.fillStyle = GOLD;
+  ctx.fillRect(0, 0, 7, S);
+  ctx.fillRect(S - 7, 0, 7, S);
+  return toTexture(canvas);
+}
+
+/** Gradient dọc cho luồng sáng giếng trời: đậm ở trần, tan dần trước khi chạm tầm mắt và sàn. */
+export function makeBeamTexture() {
+  const [canvas, ctx] = makeCanvas(4, 256);
+  const g = ctx.createLinearGradient(0, 0, 0, 256); // y = 0 ứng với v = 1 (đỉnh)
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.35, 'rgba(255,255,255,0.55)');
+  g.addColorStop(0.7, 'rgba(255,255,255,0.12)');
+  g.addColorStop(1, 'rgba(255,255,255,0.03)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 4, 256);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+/** Hạt bụi: chấm tròn mềm. */
+export function makeDustTexture() {
+  const [canvas, ctx] = makeCanvas(32, 32);
+  const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.4, 'rgba(255,255,255,0.5)');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 32, 32);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}

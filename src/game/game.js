@@ -1,4 +1,6 @@
 import { sound } from './audio.js';
+import { getSettings, onSettingsChange, setSetting } from '../shared/settings.js';
+import { mountSettings } from '../shared/settingsUI.js';
 import {
   ACHIEVEMENTS,
   evaluatePersonaProfile,
@@ -119,9 +121,18 @@ class HCMStudentLifeGame {
       this.startGame();
     });
 
+    // Nút âm thanh trên thanh điều hướng và hộp thoại Cài đặt dùng chung một cài đặt
+    const applySound = ({ sound: on, volume }) => {
+      this.soundEnabled = on;
+      sound.enabled = on;
+      sound.setVolume(volume);
+      this.el.soundIcon.textContent = on ? '🔊' : '🔇';
+      this.el.soundToggleBtn.setAttribute('aria-pressed', String(on));
+    };
+    applySound(getSettings());
+    onSettingsChange(applySound);
     this.el.soundToggleBtn.addEventListener('click', () => {
-      this.soundEnabled = sound.toggle();
-      this.el.soundIcon.textContent = this.soundEnabled ? '🔊' : '🔇';
+      setSetting('sound', !getSettings().sound);
       this.showToast(this.soundEnabled ? 'Đã bật âm thanh' : 'Đã tắt âm thanh');
     });
 
@@ -623,5 +634,6 @@ class HCMStudentLifeGame {
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
+  mountSettings();
   window.gameInstance = new HCMStudentLifeGame();
 });

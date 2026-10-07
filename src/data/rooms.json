@@ -2,7 +2,13 @@
   "museum": {
     "title": "Bảo tàng Tư tưởng Hồ Chí Minh",
     "motto": "Không có gì quý hơn độc lập, tự do",
-    "mottoSource": "Hồ Chí Minh, Lời kêu gọi đồng bào và chiến sĩ cả nước, 17/7/1966"
+    "mottoSource": "Hồ Chí Minh, Lời kêu gọi đồng bào và chiến sĩ cả nước, 17/7/1966",
+    "music": {
+      "src": "audio/sanh.mp3"
+    },
+    "roomMusic": {
+      "src": "audio/nhac-nen-phong.mp3"
+    }
   },
   "museumIntro": "Bảo tàng Tư tưởng Hồ Chí Minh đưa bạn đi qua sáu phòng trưng bày, ứng với sáu chương của môn học. Bắt đầu từ câu hỏi tư tưởng Hồ Chí Minh là gì, đi theo hành trình hình thành tư tưởng ấy, rồi dừng lại ở những quan điểm lớn: độc lập dân tộc và chủ nghĩa xã hội, Đảng và Nhà nước, đại đoàn kết, văn hóa, đạo đức và con người. Ở mỗi phòng, hãy lật mặt sau của từng bức tranh để thấy tư tưởng ấy còn nói gì với chúng ta hôm nay.",
   "ending": {
@@ -61,6 +67,13 @@
     {
       "id": "khoi-nguyen",
       "order": 1,
+      "icon": "book",
+      "audio": {
+        "src": "audio/phong/khoi-nguyen.mp3",
+        "title": "Thuyết minh: Phòng Khởi nguyên",
+        "loop": false,
+        "volume": 1
+      },
       "name": "Phòng Khởi nguyên",
       "chapter": "Chương 1",
       "subtitle": "Khái niệm, đối tượng và ý nghĩa học tập tư tưởng Hồ Chí Minh",
@@ -172,6 +185,13 @@
     {
       "id": "hanh-trinh",
       "order": 2,
+      "icon": "ship",
+      "audio": {
+        "src": "audio/phong/hanh-trinh.mp3",
+        "title": "Thuyết minh: Phòng Hành trình",
+        "loop": false,
+        "volume": 1
+      },
       "name": "Phòng Hành trình",
       "chapter": "Chương 2",
       "subtitle": "Cơ sở, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh",
@@ -363,6 +383,13 @@
     {
       "id": "doc-lap-cnxh",
       "order": 3,
+      "icon": "star",
+      "audio": {
+        "src": "audio/phong/doc-lap-cnxh.mp3",
+        "title": "Thuyết minh: Phòng Độc lập dân tộc và Chủ nghĩa xã hội",
+        "loop": false,
+        "volume": 1
+      },
       "name": "Phòng Độc lập dân tộc và Chủ nghĩa xã hội",
       "chapter": "Chương 3",
       "subtitle": "Tư tưởng về độc lập dân tộc gắn liền với chủ nghĩa xã hội",
@@ -387,7 +414,18 @@
           },
           "imageSource": "Front pour l'indépendance du Việt-Nam, Public domain, qua Wikimedia Commons",
           "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pr%C3%A9sident_Ho-chi-Minh_lit_la_Proclamation-d%27ind%C3%A9pendance_sur_la_place_Ba-dinh_le_2nd_Sep_1945.jpg",
-          "imageHint": "Ảnh Quảng trường Ba Đình, 2/9/1945"
+          "imageHint": "Ảnh Quảng trường Ba Đình, 2/9/1945",
+          "video": {
+            "youtube": "xRKUB3fUTJM",
+            "start": 0,
+            "title": "Chủ tịch Hồ Chí Minh đọc Tuyên ngôn Độc lập, 2/9/1945",
+            "kind": "Phim tư liệu gốc, có tiếng",
+            "date": "2/9/1945",
+            "place": "Quảng trường Ba Đình, Hà Nội",
+            "duration": "8:23",
+            "description": "Thước phim ghi lại lễ Độc lập tại Quảng trường Ba Đình chiều 2/9/1945 và giọng Chủ tịch Hồ Chí Minh đọc toàn văn bản Tuyên ngôn Độc lập, khai sinh nước Việt Nam Dân chủ Cộng hòa. Đây là đoạn phim duy nhất còn lại về sự kiện này.",
+            "source": "Bản phát của VTV24, Đài Truyền hình Việt Nam"
+          }
         },
         {
           "id": "p3-doc-lap-gan-voi-hanh-phuc",
@@ -427,7 +465,18 @@
           },
           "imageSource": null,
           "imageSourceUrl": null,
-          "imageHint": "Ảnh Thư gửi đồng bào Nam Bộ (1946)"
+          "imageHint": "Ảnh Thư gửi đồng bào Nam Bộ (1946)",
+          "video": {
+            "youtube": "2DCtZ2zeKok",
+            "start": 0,
+            "title": "Lời kêu gọi đồng bào và chiến sĩ cả nước: \"Không có gì quý hơn độc lập, tự do\"",
+            "kind": "Tư liệu âm thanh, giọng đọc của Chủ tịch Hồ Chí Minh",
+            "date": "17/7/1966",
+            "place": "Đài Tiếng nói Việt Nam, Hà Nội",
+            "duration": "2:24",
+            "description": "Ngày 17/7/1966, khi Mỹ mở rộng chiến tranh bằng không quân ra miền Bắc, Chủ tịch Hồ Chí Minh ra Lời kêu gọi đồng bào và chiến sĩ cả nước, phát trên Đài Tiếng nói Việt Nam. Câu \"Không có gì quý hơn độc lập, tự do\" trở thành chân lý của thời đại, khẳng định quyết tâm giữ trọn độc lập, thống nhất Tổ quốc.",
+            "source": "Kênh YouTube của Bảo tàng Hồ Chí Minh"
+          }
         },
         {
           "id": "p3-con-duong-cach-mang-vo-san",
@@ -467,7 +516,18 @@
           },
           "imageSource": "Viet Minh's poster, Public domain, qua Wikimedia Commons",
           "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Viet_Minh_poster.jpg",
-          "imageHint": "Ảnh tranh cổ động hoặc hình minh họa \"con đỉa hai vòi\" tự vẽ"
+          "imageHint": "Ảnh tranh cổ động hoặc hình minh họa \"con đỉa hai vòi\" tự vẽ",
+          "video": {
+            "youtube": "YurgbCrMKTI",
+            "start": 0,
+            "title": "Chủ tịch Hồ Chí Minh chúc Tết đồng bào, chiến sĩ Xuân Mậu Thân 1968",
+            "kind": "Tư liệu âm thanh, giọng đọc của Chủ tịch Hồ Chí Minh",
+            "date": "Giao thừa Tết Mậu Thân, 1968",
+            "place": "Đài Tiếng nói Việt Nam, Hà Nội",
+            "duration": "2:18",
+            "description": "Bài thơ chúc Tết Người đọc trên làn sóng Đài Tiếng nói Việt Nam đêm giao thừa Mậu Thân: \"Xuân này hơn hẳn mấy xuân qua, / Thắng trận tin vui khắp nước nhà, / Nam Bắc thi đua đánh giặc Mỹ. / Tiến lên! Toàn thắng ắt về ta!\". Lời chúc là hiệu lệnh động viên toàn dân cả hai miền cùng đứng lên.",
+            "source": "Báo điện tử VOV, Đài Tiếng nói Việt Nam"
+          }
         },
         {
           "id": "p3-thoi-ky-qua-do",
@@ -494,6 +554,13 @@
     {
       "id": "dang-nha-nuoc",
       "order": 4,
+      "icon": "ballot",
+      "audio": {
+        "src": "audio/phong/dang-nha-nuoc.mp3",
+        "title": "Thuyết minh: Phòng Đảng và Nhà nước",
+        "loop": false,
+        "volume": 1
+      },
       "name": "Phòng Đảng và Nhà nước",
       "chapter": "Chương 4",
       "subtitle": "Đảng Cộng sản Việt Nam; Nhà nước của dân, do dân, vì dân",
@@ -598,7 +665,18 @@
           },
           "imageSource": "Ảnh: TTXVN. Ảnh tư liệu, Cổng thông tin Nghệ An",
           "imageSourceUrl": "https://hcc.nghean.gov.vn/tin-tong-hop/75-nam-quoc-hoi-viet-nam-chu-tich-ho-chi-minh-va-cuoc-tong-tuyen-cu-dau-tien-67.html",
-          "imageHint": "Ảnh Chủ tịch Hồ Chí Minh bỏ phiếu trong cuộc Tổng tuyển cử 6/1/1946"
+          "imageHint": "Ảnh Chủ tịch Hồ Chí Minh bỏ phiếu trong cuộc Tổng tuyển cử 6/1/1946",
+          "video": {
+            "youtube": "vXIydQnLYPg",
+            "start": 0,
+            "title": "Ngày Tổng tuyển cử đầu tiên, 6/1/1946",
+            "kind": "Phim tư liệu gốc",
+            "date": "6/1/1946",
+            "place": "Hà Nội",
+            "duration": "0:36",
+            "description": "Những thước phim về ngày cử tri cả nước đi bỏ phiếu bầu Quốc hội đầu tiên của nước Việt Nam Dân chủ Cộng hòa, chỉ bốn tháng sau ngày độc lập. Cuộc Tổng tuyển cử mở đầu quá trình xây dựng Nhà nước của dân, do dân, vì dân.",
+            "source": "VTV24, Đài Truyền hình Việt Nam"
+          }
         },
         {
           "id": "p4-nha-nuoc-do-dan-vi-dan",
@@ -646,6 +724,13 @@
     {
       "id": "dai-doan-ket",
       "order": 5,
+      "icon": "hand",
+      "audio": {
+        "src": "audio/phong/dai-doan-ket.mp3",
+        "title": "Thuyết minh: Phòng Đại đoàn kết",
+        "loop": false,
+        "volume": 1
+      },
       "name": "Phòng Đại đoàn kết",
       "chapter": "Chương 5",
       "subtitle": "Đoàn kết dân tộc và đoàn kết quốc tế",
@@ -779,6 +864,13 @@
     {
       "id": "van-hoa-dao-duc",
       "order": 6,
+      "icon": "sprout",
+      "audio": {
+        "src": "audio/phong/van-hoa-dao-duc.mp3",
+        "title": "Thuyết minh: Phòng Văn hóa, Đạo đức, Con người",
+        "loop": false,
+        "volume": 1
+      },
       "name": "Phòng Văn hóa, Đạo đức, Con người",
       "chapter": "Chương 6",
       "subtitle": "Tư tưởng về văn hóa, đạo đức và con người",
@@ -945,7 +1037,18 @@
           },
           "imageSource": "Musée Annam, Public domain, qua Wikimedia Commons",
           "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ho-chi-Minh_with_children_(5).jpg",
-          "imageHint": "Ảnh Bác với thiếu nhi, học sinh"
+          "imageHint": "Ảnh Bác với thiếu nhi, học sinh",
+          "video": {
+            "youtube": "h00qCbwd5ew",
+            "start": 0,
+            "title": "Chủ tịch Hồ Chí Minh và Tết trồng cây",
+            "kind": "Phim tư liệu (chuyên mục \"Ngày này năm xưa\")",
+            "date": "11/1/1960",
+            "place": "Công viên Bảy Mẫu (nay là công viên Thống Nhất), Hà Nội",
+            "duration": "3:05",
+            "description": "Ngày 11/1/1960, Chủ tịch Hồ Chí Minh trồng cây đa tại công viên Bảy Mẫu, mở đầu Tết trồng cây đầu tiên mà Người phát động. Hình ảnh trồng cây gắn liền với lời dạy: \"Vì lợi ích mười năm thì phải trồng cây, vì lợi ích trăm năm thì phải trồng người\".",
+            "source": "Báo Nhân Dân"
+          }
         }
       ]
     }

@@ -17,6 +17,11 @@
   <body class="room">
     <header class="room-header">
       <a class="back-link" href="./index.html"><span aria-hidden="true">←</span> Về sảnh</a>
+      <div class="room-header__actions">
+        <!-- Điều khiển âm thanh phòng (src/shared/audioDock.js) -->
+        <div data-audio-slot></div>
+        <div data-settings-slot></div>
+      </div>
       <div class="room-heading">
         <h1 class="room-name" id="room-name">Đang tải…</h1>
         <p class="room-intro" id="room-intro"></p>

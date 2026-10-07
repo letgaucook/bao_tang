@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { makeBandTexture, makeBookTexture, makeFloorTexture, makePlaqueTexture, makeStoneTexture } from './textures.js';
+import { getMaxAnisotropy, makeBandTexture, makeBookTexture, makeFloorTexture, makePlaqueTexture, makeStoneTexture } from './textures.js';
+import { makeIconTexture } from './icons.js';
+import { buildLotusCeiling } from './lotus.js';
 
 export const HALL_RADIUS = 8; // bán kính ngoại tiếp lục giác = chiều dài mỗi bức tường
 export const HALL_HEIGHT = 6;
@@ -10,6 +12,12 @@ export const DOOR_OPEN_ANGLE = 1.35;
 const APOTHEM = HALL_RADIUS * Math.cos(Math.PI / 6);
 const WALL_WIDTH = HALL_RADIUS;
 
+const HEMI_INTENSITY = 0.45;
+const DOOR_SPOT = 34; // cường độ đèn rọi cửa
+const DOOR_SPOT_VISITED = 44;
+const LOOK_BOOST = 0.75; // cửa ở giữa tầm nhìn sáng thêm 75%
+const LOOK_THRESHOLD = Math.cos(THREE.MathUtils.degToRad(24));
+
 const COLORS = {
   lacquer: 0x7a1712,
   lacquerLight: 0x8e2119,
@@ -17,7 +25,7 @@ const COLORS = {
   granite: 0x3e3d3a,
   graniteDark: 0x2c2b29,
   stone: 0xd8d4cc,
-  ceiling: 0x4a4540,
+  wood: 0x4a3426,
 };
 
 /**
@@ -156,6 +164,27 @@ function buildDoor(index, room, shared) {
   door.add(plaqueBack, plaque);
   hits.push(plaque, plaqueBack);
 
+  // Biểu tượng phòng: nét vàng trên nền trong suốt, ngay trên biển tên
+  const iconTexture = makeIconTexture(room.icon, getMaxAnisotropy());
+  if (iconTexture) {
+    const icon = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.46, 0.46),
+      new THREE.MeshStandardMaterial({
+        map: iconTexture,
+        transparent: true,
+        alphaTest: 0.05,
+        roughness: 0.4,
+        metalness: 0.3,
+        emissive: 0xffffff,
+        emissiveMap: iconTexture,
+        emissiveIntensity: 0.35,
+      }),
+    );
+    icon.position.set(0, DOOR_HEIGHT + 1.41, 0.04);
+    door.add(icon);
+    hits.push(icon);
+  }
+
   door.add(buildCorridor());
 
   for (const mesh of hits) mesh.userData.doorIndex = index;
@@ -171,22 +200,22 @@ function buildWall(index, shared) {
 
   wall.add(new THREE.Mesh(shared.wallGeometry, shared.wallMaterial));
 
-  // Chân tường đá granite hai bên cửa
+  // Chân tường ốp gỗ tối hai bên cửa, gờ vàng mảnh phân cách
   const dadoH = 0.9;
   const sideW = WALL_WIDTH / 2 - DOOR_WIDTH / 2 - 0.14;
   for (const s of [-1, 1]) {
-    const dado = box(sideW, dadoH, 0.06, shared.dadoMaterial);
+    const dado = box(sideW, dadoH, 0.06, shared.woodMaterial);
     dado.position.set(s * (DOOR_WIDTH / 2 + 0.14 + sideW / 2), dadoH / 2, 0.03);
-    const cap = box(sideW, 0.04, 0.09, shared.goldMaterial);
+    const cap = box(sideW, 0.03, 0.08, shared.goldMaterial);
     cap.position.set(dado.position.x, dadoH, 0.045);
     wall.add(dado, cap);
   }
 
-  // Băng chữ chạy quanh sảnh, kẹp giữa hai gờ vàng
+  // Băng chữ chạy quanh đỉnh tường, ngay dưới gốc các cánh sen, kẹp giữa hai gờ vàng
   const band = new THREE.Mesh(shared.bandGeometry, shared.bandMaterials[index]);
-  band.position.set(0, 4.95, 0.02);
+  band.position.set(0, 5.4, 0.02);
   wall.add(band);
-  for (const y of [4.43, 5.47]) {
+  for (const y of [4.88, 5.92]) {
     const moulding = box(WALL_WIDTH, 0.05, 0.08, shared.goldMaterial);
     moulding.position.set(0, y, 0.04);
     wall.add(moulding);
@@ -204,9 +233,9 @@ function buildPilasters(shared) {
     pillar.position.set(Math.sin(a) * r, HALL_HEIGHT / 2, -Math.cos(a) * r);
     pillar.rotation.y = -a;
     const capital = box(0.62, 0.14, 0.46, shared.goldMaterial);
-    capital.position.set(pillar.position.x, 4.36, pillar.position.z);
+    capital.position.set(pillar.position.x, 4.86, pillar.position.z);
     capital.rotation.y = -a;
-    const base = box(0.62, 0.24, 0.46, shared.dadoMaterial);
+    const base = box(0.62, 0.24, 0.46, shared.woodMaterial);
     base.position.set(pillar.position.x, 0.12, pillar.position.z);
     base.rotation.y = -a;
     group.add(pillar, capital, base);
@@ -214,92 +243,29 @@ function buildPilasters(shared) {
   return group;
 }
 
-function buildFloorAndCeiling(shared) {
-  const group = new THREE.Group();
-
+function buildFloor(shared) {
   const floorTexture = makeFloorTexture(shared.floorPattern);
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(HALL_RADIUS, 6),
     new THREE.MeshStandardMaterial({ map: floorTexture, roughness: 0.32, metalness: 0.08 }),
   );
   floor.rotation.x = -Math.PI / 2;
-  group.add(floor);
-
-  const ceiling = new THREE.Mesh(
-    new THREE.CircleGeometry(HALL_RADIUS, 6),
-    new THREE.MeshStandardMaterial({ color: COLORS.ceiling, roughness: 0.9, emissive: 0x3a2e20, emissiveIntensity: 0.6 }),
-  );
-  ceiling.rotation.x = Math.PI / 2;
-  ceiling.position.y = HALL_HEIGHT;
-  group.add(ceiling);
-
-  // Ô trần lõm hình tròn và vòng đèn phát sáng ở giữa
-  const coffer = new THREE.Mesh(
-    new THREE.RingGeometry(2.55, 2.75, 96),
-    new THREE.MeshStandardMaterial({ color: COLORS.gold, metalness: 0.6, roughness: 0.4, side: THREE.DoubleSide }),
-  );
-  coffer.rotation.x = Math.PI / 2;
-  coffer.position.y = HALL_HEIGHT - 0.01;
-  group.add(coffer);
-
-  // Vòng chỉ vàng thứ hai gần tường: thấy được cả khi nhìn trên điện thoại (FOV rộng)
-  const outer = coffer.clone();
-  outer.geometry = new THREE.RingGeometry(5.4, 5.5, 6, 1, Math.PI / 6);
-  group.add(outer);
-
-  const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xfff4dc,
-    emissive: 0xffe6b0,
-    emissiveIntensity: 2.2,
-  });
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.07, 12, 128), ringMaterial);
-  ring.rotation.x = Math.PI / 2;
-  ring.position.y = HALL_HEIGHT - 0.18;
-  group.add(ring);
-
-  const disc = new THREE.Mesh(
-    new THREE.CircleGeometry(2.1, 96),
-    new THREE.MeshStandardMaterial({ color: 0x3a3632, emissive: 0x5a4a30, emissiveIntensity: 0.35 }),
-  );
-  disc.rotation.x = Math.PI / 2;
-  disc.position.y = HALL_HEIGHT - 0.02;
-  group.add(disc);
-
-  // Vòng đèn sáu cung treo thấp, đủ rộng để thấy được khi ngước nhìn:
-  // mỗi phòng đã tham quan thắp sáng thêm một cung
-  const gap = 0.07;
-  const segments = [];
-  for (let i = 0; i < 6; i++) {
-    const material = new THREE.MeshStandardMaterial({ color: 0x4a3c26, roughness: 0.5, metalness: 0.4, emissive: 0xffe2a8, emissiveIntensity: 0.05 });
-    const arc = new THREE.Mesh(new THREE.TorusGeometry(4.9, 0.06, 10, 64, Math.PI / 3 - gap * 2), material);
-    arc.rotation.x = Math.PI / 2;
-    // Cung đầu tiên bắt đầu ở phía cửa 1 (hướng -Z)
-    arc.rotation.z = -Math.PI / 2 - Math.PI / 6 + gap + (i * Math.PI) / 3;
-    arc.position.y = HALL_HEIGHT - 0.45;
-    group.add(arc);
-    segments.push(material);
-  }
-
-  return { group, ringMaterial, segments };
+  return floor;
 }
 
+/** Ánh sáng nền yếu + mỗi cửa một đèn rọi. Không bật bóng đổ. Đèn giếng trời nằm trong lotus.js. */
 function buildLights(scene, doors) {
-  const hemi = new THREE.HemisphereLight(0xfff0d6, 0x3e3d3a, 0.9);
+  const hemi = new THREE.HemisphereLight(0xfff0d6, 0x3e3d3a, HEMI_INTENSITY);
   scene.add(hemi);
 
-  const center = new THREE.PointLight(0xffe7c2, 40, 0, 2);
-  center.position.set(0, HALL_HEIGHT - 0.6, 0);
-  scene.add(center);
-
-  // Mỗi cửa một đèn rọi từ trần xuống; không bật bóng đổ để chạy nhẹ
   for (const door of doors) {
-    const spot = new THREE.SpotLight(0xffe2b0, 38, 9, 0.42, 0.65, 2);
+    const spot = new THREE.SpotLight(0xffe2b0, 0, 9, 0.42, 0.65, 2);
     spot.position.set(0, HALL_HEIGHT - 0.25, 2.1);
     spot.target.position.set(0, 1.5, 0);
     door.wall.add(spot, spot.target);
     door.spot = spot;
   }
-  return { hemi, center };
+  return { hemi };
 }
 
 /* ---------- Bệ và cuốn sách mở (P3) ---------- */
@@ -401,7 +367,7 @@ function buildBook(shared, { action, angle, title, promptText, cover: coverColor
  * Dựng toàn bộ sảnh. rooms: danh sách phòng đã sắp theo order.
  * museum: { title, motto, mottoSource } cho băng chữ.
  */
-export function buildHall(scene, rooms, museum, { floorPattern = null, birdImage = null } = {}) {
+export function buildHall(scene, rooms, museum, { floorPattern = null, birdImage = null, coarse = false } = {}) {
   const stoneTexture = makeStoneTexture();
   stoneTexture.repeat.set(1 / 2, 1 / 1.5); // phiến đá 2m × 1,5m
 
@@ -431,6 +397,7 @@ export function buildHall(scene, rooms, museum, { floorPattern = null, birdImage
     wallGeometry: wallGeometry(),
     wallMaterial: new THREE.MeshStandardMaterial({ map: stoneTexture, color: 0xffffff, roughness: 0.85 }),
     dadoMaterial: new THREE.MeshStandardMaterial({ color: COLORS.granite, roughness: 0.4, metalness: 0.05 }),
+    woodMaterial: new THREE.MeshStandardMaterial({ color: COLORS.wood, roughness: 0.55, metalness: 0.02 }),
     pilasterMaterial: new THREE.MeshStandardMaterial({ color: COLORS.lacquer, roughness: 0.42 }),
     goldMaterial: new THREE.MeshStandardMaterial({ color: COLORS.gold, metalness: 0.75, roughness: 0.35 }),
     panelMaterial: new THREE.MeshStandardMaterial({ color: COLORS.lacquerLight, roughness: 0.32 }),
@@ -448,30 +415,83 @@ export function buildHall(scene, rooms, museum, { floorPattern = null, birdImage
     return { index, room, wall, direction: doorDirection(index), ...parts };
   });
 
-  const ceiling = buildFloorAndCeiling(shared);
-  scene.add(ceiling.group);
+  scene.add(buildFloor(shared));
+  const lotus = buildLotusCeiling({ apothem: APOTHEM, wallHeight: HALL_HEIGHT, coarse });
+  scene.add(lotus.group);
   const books = BOOKS.map((spec) => buildBook(shared, spec));
   for (const book of books) scene.add(book.group);
   scene.add(buildPilasters(shared));
   const lights = buildLights(scene, doors);
 
-  /**
-   * Mức sáng của sảnh theo số phòng đã tham quan (0–6, có thể lẻ khi đang chuyển).
-   */
-  function setProgressLevel(level) {
-    ceiling.segments.forEach((m, i) => {
-      const k = THREE.MathUtils.clamp(level - i, 0, 1);
-      m.emissiveIntensity = 0.05 + k * 3;
-    });
-    ceiling.ringMaterial.emissiveIntensity = 1.2 + level * 0.35;
-    lights.center.intensity = 30 + level * 4;
-    lights.hemi.intensity = 0.8 + level * 0.03;
+  // Trạng thái ánh sáng: các hệ số 0–1 do trình tự mở màn điều khiển
+  const intro = { doors: doors.map(() => 1) };
+  const look = doors.map(() => 0);
+  const visitedDoors = doors.map(() => false);
+
+  function applyDoorLight(i) {
+    const base = visitedDoors[i] ? DOOR_SPOT_VISITED : DOOR_SPOT;
+    doors[i].spot.intensity = base * intro.doors[i] * (1 + LOOK_BOOST * look[i]);
   }
 
-  function setDoorVisited(door, visited) {
-    door.spot.intensity = visited ? 60 : 20;
+  function setDoorVisited(door, visited, { instant = false } = {}) {
+    visitedDoors[door.index] = visited;
     door.plaqueFrameMaterial.emissiveIntensity = visited ? 0.75 : 0;
+    lotus.setPetal(door.index, visited, { instant });
+    applyDoorLight(door.index);
   }
 
-  return { doors, books, setProgressLevel, setDoorVisited };
+  /**
+   * Trình tự mở màn: sky (giếng trời, luồng sáng, bụi, ánh sáng nền), doors[i] (đèn rọi cửa i),
+   * band (băng chữ). Mỗi hệ số 0–1; bỏ trống thì giữ nguyên.
+   */
+  function setIntro({ sky, doors: doorLevels, band } = {}) {
+    if (sky != null) {
+      lotus.setSkyLevel(sky);
+      lights.hemi.intensity = HEMI_INTENSITY * sky;
+    }
+    if (doorLevels) {
+      doorLevels.forEach((k, i) => {
+        intro.doors[i] = k;
+        applyDoorLight(i);
+      });
+    }
+    if (band != null) {
+      for (const m of bandMaterials) {
+        m.color.setScalar(band);
+        m.emissiveIntensity = 0.12 * band;
+      }
+    }
+  }
+
+  const viewDir = new THREE.Vector3();
+
+  /**
+   * Gọi mỗi frame. Cửa nằm giữa tầm nhìn (theo hướng camera, không theo con trỏ) được đèn rọi
+   * sáng thêm, chuyển mượt: người dùng điện thoại không có hover vẫn biết mình đang nhìn cửa nào.
+   */
+  function update(dt, camera, { dustMoving = true } = {}) {
+    lotus.update(dt, { dustMoving });
+    camera.getWorldDirection(viewDir);
+    viewDir.y = 0;
+    viewDir.normalize();
+    let best = -1;
+    let bestDot = LOOK_THRESHOLD;
+    for (const door of doors) {
+      const d = viewDir.dot(door.direction);
+      if (d > bestDot) {
+        bestDot = d;
+        best = door.index;
+      }
+    }
+    const k = 1 - Math.exp(-Math.max(0, dt) * 5); // dt âm sẽ làm hệ số vượt 1 và dao động phân kỳ
+    for (let i = 0; i < doors.length; i++) {
+      const target = i === best ? 1 : 0;
+      if (look[i] === target) continue;
+      look[i] += (target - look[i]) * k;
+      if (Math.abs(look[i] - target) < 1e-3) look[i] = target;
+      applyDoorLight(i);
+    }
+  }
+
+  return { doors, books, setDoorVisited, setBloom: lotus.setBloom, setDustVisible: lotus.setDustVisible, setIntro, update };
 }

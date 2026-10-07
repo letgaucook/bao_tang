@@ -1,0 +1,100 @@
+/* Dải điều khiển âm thanh (sảnh, phòng). Tự khai báo màu để không phụ thuộc CSS của từng trang. */
+
+.audio-dock {
+  --ad-gold: #c9a23f;
+  --ad-gold-soft: #e2c77a;
+  --ad-cream: #f3ede0;
+  --ad-lacquer: #7a1712;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 4px;
+  font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+  color: var(--ad-cream);
+  background: rgb(28 27 25 / 0.82);
+  border: 1px solid rgb(201 162 63 / 0.5);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  max-width: 100%;
+}
+
+.audio-dock__btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: var(--ad-cream);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.audio-dock__btn[data-play] {
+  color: var(--ad-gold-soft);
+  background: rgb(122 23 18 / 0.85);
+}
+
+.audio-dock__btn:hover:not(:disabled) {
+  background: rgb(201 162 63 / 0.22);
+}
+
+.audio-dock__btn[data-play]:hover:not(:disabled) {
+  background: var(--ad-lacquer);
+}
+
+.audio-dock__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.audio-dock__btn:focus-visible,
+.audio-dock__volume:focus-visible {
+  outline: 2px solid var(--ad-gold-soft);
+  outline-offset: 2px;
+}
+
+.audio-dock__volume {
+  width: 84px;
+  accent-color: var(--ad-gold);
+  cursor: pointer;
+}
+
+.audio-dock__volume:disabled {
+  opacity: 0.4;
+}
+
+.audio-dock__title {
+  min-width: 0;
+  max-width: 220px;
+  margin-left: 4px;
+  overflow: hidden;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: rgb(243 237 224 / 0.85);
+}
+
+.audio-dock.is-unavailable .audio-dock__title {
+  font-style: italic;
+  color: rgb(243 237 224 / 0.55);
+}
+
+.audio-dock.is-playing .audio-dock__title {
+  color: var(--ad-gold-soft);
+}
+
+@media (max-width: 640px) {
+  .audio-dock {
+    padding-right: 4px;
+  }
+
+  .audio-dock__volume,
+  .audio-dock__title {
+    display: none;
+  }
+}

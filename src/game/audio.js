@@ -6,6 +6,23 @@ class SoundEffects {
   constructor() {
     this.ctx = null;
     this.enabled = true;
+    this.volume = 1;
+    this.master = null;
+  }
+
+  /** Nút âm lượng chung: mọi âm thanh đi qua đây (theo cài đặt Âm lượng của trang). */
+  output() {
+    if (!this.master) {
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.volume;
+      this.master.connect(this.ctx.destination);
+    }
+    return this.master;
+  }
+
+  setVolume(value) {
+    this.volume = value;
+    if (this.master) this.master.gain.value = value;
   }
 
   init() {
@@ -38,7 +55,7 @@ class SoundEffects {
       gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.output());
       osc.start();
       osc.stop(this.ctx.currentTime + 0.06);
     } catch (e) {
@@ -60,7 +77,7 @@ class SoundEffects {
         gain.gain.setValueAtTime(0.15, now + i * 0.07);
         gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.2);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.output());
         osc.start(now + i * 0.07);
         osc.stop(now + i * 0.07 + 0.2);
       });
@@ -83,7 +100,7 @@ class SoundEffects {
         gain.gain.setValueAtTime(0.12, now + i * 0.09);
         gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.25);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.output());
         osc.start(now + i * 0.09);
         osc.stop(now + i * 0.09 + 0.25);
       });
@@ -107,7 +124,7 @@ class SoundEffects {
         gain.gain.setValueAtTime(0.25, now + i * 0.18);
         gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.18 + 0.16);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.output());
         osc.start(now + i * 0.18);
         osc.stop(now + i * 0.18 + 0.16);
       }
@@ -138,7 +155,7 @@ class SoundEffects {
         gain.gain.setValueAtTime(0.18, now + t);
         gain.gain.exponentialRampToValueAtTime(0.001, now + t + d);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.output());
         osc.start(now + t);
         osc.stop(now + t + d);
       });

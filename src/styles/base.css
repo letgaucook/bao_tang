@@ -138,16 +138,6 @@ body.lobby {
   color: var(--cream);
 }
 
-.game-lobby-btn {
-  background: linear-gradient(135deg, rgb(78 14 11 / 0.85), rgb(34 33 31 / 0.9));
-  border-color: var(--gold-soft);
-  box-shadow: 0 0 12px rgb(201 162 63 / 0.25);
-}
-
-.game-lobby-btn:hover {
-  background: linear-gradient(135deg, var(--lacquer), #961d17);
-  box-shadow: 0 0 16px rgb(201 162 63 / 0.45);
-}
 
 .map-game-btn {
   text-decoration: none;
@@ -538,10 +528,6 @@ body.no-webgl .map-panel {
 }
 
 @media (max-width: 520px) {
-  .lobby-title {
-    font-size: 0.9rem;
-  }
-
   .map-toggle {
     padding: 8px 12px;
     font-size: 0.82rem;
@@ -834,4 +820,9 @@ a.panel-btn {
 .credits a {
   color: var(--lacquer);
   text-underline-offset: 2px;
+}
+
+/* Thuộc tính hidden luôn thắng các class đặt display (vd. .map-toggle dùng inline-flex) */
+[hidden] {
+  display: none !important;
 }
